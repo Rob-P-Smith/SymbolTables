@@ -1,4 +1,4 @@
-public class BinarySearchST<Key extends Comparable, Value> implements SymbolTable<Key, Value>
+public class BinarySearchST<Key extends Comparable<Key>, Value> implements SymbolTable<Key, Value>
 {
     // private fields
     private Key[] keys;     // array of keys
@@ -10,7 +10,7 @@ public class BinarySearchST<Key extends Comparable, Value> implements SymbolTabl
         // size is the actual space used
         // wanted to do keys = new Key[capacity], but Java doesn't do it
         // so this below is a workaround (ugly!)
-        keys = (Key[])new Object[capacity];
+        keys = (Key[])new Comparable[capacity];
         values = (Value[])new Object[capacity];
     }
 
@@ -32,27 +32,49 @@ public class BinarySearchST<Key extends Comparable, Value> implements SymbolTabl
                 return mid;
             }
         }
-
         return low;
     }
 
     @Override
     public void put(Key key, Value val) {
-
+        int i  = rank(key);
+        if (i<size && key.compareTo(keys[i])==0){
+            values[i] = val;
+            return;
+        }
+        for (int k = size; k > i; k--) {
+          keys[k] = keys[k-1];
+          values[k] = values[k-1];
+        }
+        keys[i]=key;
+        values[i]=val;
+        size++;
     }
 
     @Override
     public Value get(Key key) {
+        if(isEmpty()){
+            return null;
+        }
+        int i = rank(key);
+
+        if(i<size && key.equals(keys[i])){
+            return values[i];
+        }
         return null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public Iterable<Key> keys() {
-        return null;
+       Queue<Key> q = new LinkedQueue<>();
+       for (int i = 0; i<size;i++){
+           q.enqueue(keys[i]);
+       }
+        return q;
     }
 }
