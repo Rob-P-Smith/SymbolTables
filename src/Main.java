@@ -25,7 +25,6 @@ public class Main {
             String theKey = in.next();
             int theValue = i;
             table.put(theKey, theValue);
-
             i++;
         }
 

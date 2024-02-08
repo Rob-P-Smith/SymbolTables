@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.function.Consumer;
+
 public class SequentialSearchST<Key, Value> implements SymbolTable<Key, Value> {
     private Node head;
     private int size;
@@ -63,6 +66,14 @@ public class SequentialSearchST<Key, Value> implements SymbolTable<Key, Value> {
 
     @Override
     public Iterable<Key> keys() {
-        return null;
+        Queue<Key> q = new LinkedQueue<>();
+
+        Node current = head;
+        while (current != null){
+            q.enqueue(current.key);
+            current = current.next;
+        }
+        return q;
     }
+
 }
